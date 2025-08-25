@@ -1,0 +1,241 @@
+/* src/AnalyticsDashboard.css */
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* --- Loading Screen --- */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-left-color: #00aaff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 10px;
+  animation: pulse 2s infinite;
+}
+
+.loading-subtext {
+  font-size: 1rem;
+  color: #a0a0a0;
+}
+
+/* --- Main Dashboard Container --- */
+.dashboard-container {
+  padding: 2rem;
+  background: #10101a;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.dashboard-header h1 {
+  font-size: 2.8rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #00aaff, #aa55ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+  font-size: 1.1rem;
+  color: #b0b0b0;
+}
+
+/* --- Grid Layouts --- */
+.stats-grid, .charts-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.stats-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.charts-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* --- Card Styles (Glassmorphism) --- */
+.stat-card, .chart-card, .ai-insights-card {
+  background: rgba(40, 40, 60, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.stat-card:hover, .chart-card:hover, .ai-insights-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px 0 rgba(0, 170, 255, 0.2);
+}
+
+.stat-card .card-header {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #c0c0c0;
+  margin-bottom: 1rem;
+}
+
+.stat-card .card-header i {
+  margin-right: 10px;
+  color: #00aaff;
+  font-size: 1.2rem;
+}
+
+.stat-card h2 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.stat-card .change {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.change.increase { color: #28a745; }
+.change.decrease { color: #dc3545; }
+
+.chart-card h3, .ai-insights-card h3 {
+  color: #00aaff;
+  border-bottom: 2px solid #00aaff;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+.chart-card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.ai-insights-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ai-insights-card li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d0d0d0;
+}
+.ai-insights-card li:last-child {
+  border-bottom: none;
+}
+.insight-highlight {
+  font-weight: bold;
+  color: #00d0ff;
+}
+.ai-insights-card i {
+  margin-right: 10px;
+}
+
+/* --- Live Performance Monitor --- */
+.performance-monitor {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 0.8rem;
+  font-family: 'Fira Code', monospace;
+  display: flex;
+  gap: 20px;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+.status-online {
+  color: #28a745;
+  animation: pulse 1.5s infinite;
+}
+
+/* --- Back Button --- */
+.back-to-home {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-back {
+    color: #fff;
+    background: linear-gradient(90deg, #00aaff, #aa55ff);
+    padding: 12px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+    transform: scale(1.05);
+}
+
+/* --- Keyframe Animations --- */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .performance-monitor {
+    position: static;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 1.5rem;
+  }
+}
