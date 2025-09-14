@@ -1,68 +1,77 @@
 // src/Navbar.js
 
-import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './MainPage.css';
 
 const Navbar = ({ currentUser, totalCartItems, onCartClick, onLogout }) => {
-  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [navScrolled, setNavScrolled] = useState(false);
+  const navigate = useNavigate();
+  const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
 
-  // Effect to handle navbar background change on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setNavScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    navigate('/login');
+  };
 
-  const handleLogoutClick = () => {
-    setIsUserDropdownOpen(false);
-    onLogout();
+  const toggleShopMenu = () => {
+    setIsShopMenuOpen(!isShopMenuOpen);
+  };
+  
+  const handleShopLinkClick = () => {
+    setIsShopMenuOpen(false);
   };
 
   return (
-    <nav className={navScrolled ? "site-nav scrolled" : "site-nav"}>
-      <div className="nav-container">
-        <Link className="navbar-brand" to="/mainpage">
-          <i className="fas fa-robot"></i> TOYS PARADISE
-        </Link>
-        <ul className="nav-links">
-          {/* Use NavLink for active styling */}
-          <li><NavLink className="nav-link" to="/mainpage">Home</NavLink></li>
-          <li><NavLink className="nav-link" to="/popular">Popular</NavLink></li>
-          <li><NavLink className="nav-link" to="/newarrivals">New Arrivals</NavLink></li>
-          <li><NavLink className="nav-link" to="/analytics">AI Dashboard</NavLink></li>
-        </ul>
-        <div className="nav-actions">
-          <button className="cart-button" onClick={onCartClick}>
-            <i className="fas fa-shopping-cart"></i>
-            <span>Cart</span>
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-left">
+          <Link className="site-logo" to="/mainpage">
+            <span className="logo-text">TOYLAND</span>
+          </Link>
+          <ul className="nav-links">
+            <li><Link to="/mainpage">หน้าแรก</Link></li>
+            <li className="shop-menu-container">
+              <button className="shop-menu-btn" onClick={toggleShopMenu}>
+                Shop <i className={`fas ${isShopMenuOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+              </button>
+              {isShopMenuOpen && (
+                <ul className="shop-dropdown-menu">
+                  <li><Link to="/popular" onClick={handleShopLinkClick}>Popular Items</Link></li>
+                  <li><Link to="/newarrivals" onClick={handleShopLinkClick}>New Arrivals</Link></li>
+                  <li><Link to="/game-figures" onClick={handleShopLinkClick}>Game Figures</Link></li>
+                  <li><Link to="/superhero-figures" onClick={handleShopLinkClick}>Superhero Figures</Link></li>
+                  <li><Link to="/gundam-models" onClick={handleShopLinkClick}>Gundam Models</Link></li>
+                  <li><Link to="/anime-figures" onClick={handleShopLinkClick}>Anime Figures</Link></li>
+                </ul>
+              )}
+            </li>
+            <li><Link to="/about">About</Link></li>
+            <li><Link to="/analytics">AI Dashboard</Link></li>
+          </ul>
+        </div>
+
+        <div className="navbar-right">
+          <div className="search-bar">
+            <i className="fas fa-search"></i>
+            <input type="text" placeholder="Search..." />
+          </div>
+          
+          <button className="cart-btn" onClick={onCartClick}>
+            <i className="fas fa-shopping-cart"></i> Cart
             <span className="cart-badge">{totalCartItems}</span>
           </button>
+          
           {currentUser ? (
             <div className="user-menu-container">
-              <button 
-                className="user-avatar-button" 
-                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-              >
-                {currentUser.username.charAt(0)}
+              <span className="user-welcome">Hello, {currentUser.username}</span>
+              <button className="logout-btn" onClick={handleLogout}>
+                <i className="fas fa-sign-out-alt"></i> Logout
               </button>
-              
-              {isUserDropdownOpen && (
-                <div className="user-dropdown">
-                  <div className="dropdown-header">
-                    Signed in as <br/>
-                    <strong>{currentUser.username}</strong>
-                  </div>
-                  <button className="dropdown-item" onClick={handleLogoutClick}>
-                    <i className="fas fa-sign-out-alt"></i> Logout
-                  </button>
-                </div>
-              )}
             </div>
           ) : (
-            <Link to="/login" className="login-button">Login</Link>
+            <Link className="login-btn" to="/login">
+              <i className="fas fa-sign-in-alt"></i> Login
+            </Link>
           )}
         </div>
       </div>

@@ -1,3 +1,5 @@
+// src/App.js
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from './login';
@@ -10,7 +12,10 @@ import GameFiguresPage from './GameFiguresPage';
 import SuperheroFiguresPage from './SuperheroFiguresPage';
 import GundamFiguresPage from './GundamFiguresPage';
 import AnimeFiguresPage from './AnimeFiguresPage';
-import AnalyticsDashboard from './AnalyticsDashboard'; 
+import CheckoutPage from './CheckoutPage';
+import ReceiptPage from './ReceiptPage';
+import AnalyticsDashboard from './AnalyticsDashboard';
+import './App.css'; 
 
 function App() {
   return (
@@ -26,7 +31,9 @@ function App() {
       <Route path="/superhero-figures" element={<SuperheroFiguresPage />} />
       <Route path="/gundam-models" element={<GundamFiguresPage />} />
       <Route path="/anime-figures" element={<AnimeFiguresPage />} />
-      <Route path="/analytics" element={<AnalyticsDashboard />} /> 
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/receipt" element={<ReceiptPage />} />
+      <Route path="/analytics" element={<AnalyticsDashboard />} />
     </Routes>
   );
 }

@@ -1,0 +1,126 @@
+/* src/ReceiptPage.css */
+
+.receipt-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.receipt-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    color: white;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.receipt-header {
+    margin-bottom: 2rem;
+}
+
+.success-icon {
+    font-size: 4rem;
+    color: #fff;
+    background: #28a745;
+    border-radius: 50%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+    display: inline-block;
+}
+
+.receipt-header h2 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.receipt-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+}
+
+.receipt-details {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: left;
+    margin-bottom: 2rem;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.receipt-details h3 {
+    font-size: 1.4rem;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.receipt-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.receipt-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+}
+
+.receipt-item:last-child {
+    border-bottom: none;
+}
+
+.receipt-summary {
+    margin-top: 1.5rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.4);
+    padding-top: 1.5rem;
+}
+
+.receipt-summary p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
+.final-total h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.back-to-home-link {
+    margin-top: 2rem;
+}
+
+.back-to-home-link a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.back-to-home-link a:hover {
+    transform: scale(1.05);
+}

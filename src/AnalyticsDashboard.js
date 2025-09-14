@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './AnalyticsDashboard.css'; // เราจะสร้างไฟล์ CSS นี้ในขั้นตอนถัดไป
+// นำเข้า Components จาก Recharts
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import './AnalyticsDashboard.css';
 
 // Data for stats cards
 const statsData = [
@@ -12,19 +14,34 @@ const statsData = [
   { icon: 'fas fa-chart-pie', label: 'อัตราการเติบโต', value: '8.7%', change: 'เทียบกับไตรมาสก่อน', changeType: 'increase' },
 ];
 
+// Sample data for the charts
+const salesByCategoryData = [
+  { name: 'Anime Figure', sales: 24000 },
+  { name: 'Game Figures', sales: 43200 },
+  { name: 'Gundam Figure', sales: 36000 },
+  { name: 'Superhero Figure', sales: 10200 },
+];
+
+const monthlySalesData = [
+  { month: 'ม.ค.', sales: 15000, orders: 85 },
+  { month: 'ก.พ.', sales: 17000, orders: 90 },
+  { month: 'มี.ค.', sales: 20000, orders: 110 },
+  { month: 'เม.ย.', sales: 22000, orders: 125 },
+  { month: 'พ.ค.', sales: 25000, orders: 140 },
+  { month: 'มิ.ย.', sales: 23000, orders: 130 },
+];
+
 const AnalyticsDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [performance, setPerformance] = useState({ cpu: 15.4, memory: 35.2, speed: 127 });
 
-  // Simulate initial AI processing
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2500); // แสดงหน้า loading 2.5 วินาที
+    }, 2500);
     return () => clearTimeout(timer);
   }, []);
 
-  // Simulate live performance updates
   useEffect(() => {
     if (!loading) {
       const interval = setInterval(() => {
@@ -33,12 +50,11 @@ const AnalyticsDashboard = () => {
           memory: (Math.random() * 30 + 30).toFixed(1),
           speed: Math.floor(Math.random() * 50 + 100),
         });
-      }, 2000); // อัปเดตทุก 2 วินาที
+      }, 2000);
       return () => clearInterval(interval);
     }
   }, [loading]);
 
-  // Loading Screen Component
   const LoadingScreen = () => (
     <div className="loading-container">
       <div className="loading-spinner"></div>
@@ -53,7 +69,6 @@ const AnalyticsDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Performance Monitor - เอฟเฟกต์ AI สด */}
       <div className="performance-monitor">
         <div><strong>AI Status:</strong> <span className="status-online">●</span> Online</div>
         <div><strong>CPU:</strong> {performance.cpu}%</div>
@@ -66,7 +81,6 @@ const AnalyticsDashboard = () => {
         <p>ข้อมูลเชิงลึกแบบเรียลไทม์เพื่อขับเคลื่อนธุรกิจของคุณ</p>
       </header>
       
-      {/* Stats Cards */}
       <div className="stats-grid">
         {statsData.map((stat, index) => (
           <div key={index} className="stat-card" style={{ animationDelay: `${index * 100}ms` }}>
@@ -80,24 +94,47 @@ const AnalyticsDashboard = () => {
         ))}
       </div>
 
-      {/* Charts & Table Section */}
       <div className="charts-grid">
         <div className="chart-card large">
           <h3>Total Sales by Category</h3>
-          <img src="/graph.png" alt="Total Sales by Category Chart" />
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={salesByCategoryData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+              <XAxis dataKey="name" stroke="#ccc" />
+              <YAxis stroke="#ccc" />
+              <Tooltip 
+                contentStyle={{ background: '#333', border: 'none' }} 
+                labelStyle={{ color: '#fff' }} 
+              />
+              <Legend />
+              <Bar dataKey="sales" fill="#00aaff" radius={[5, 5, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
         <div className="chart-card large">
           <h3>Monthly Sales Report</h3>
-          <img src="/table.png" alt="Monthly Sales Table" />
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={monthlySalesData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+              <XAxis dataKey="month" stroke="#ccc" />
+              <YAxis stroke="#ccc" />
+              <Tooltip 
+                contentStyle={{ background: '#333', border: 'none' }} 
+                labelStyle={{ color: '#fff' }} 
+              />
+              <Legend />
+              <Line type="monotone" dataKey="sales" stroke="#aa55ff" strokeWidth={3} dot={{ strokeWidth: 2, r: 4 }} />
+              <Line type="monotone" dataKey="orders" stroke="#28a745" strokeWidth={3} dot={{ strokeWidth: 2, r: 4 }} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
       
-      {/* AI Insights Section */}
       <div className="ai-insights-card">
         <h3><i className="fas fa-brain"></i> AI Insights & Recommendations</h3>
         <ul>
           <li><span className="insight-highlight">Game Figures</span> เป็นหมวดหมู่ที่ทำกำไรสูงสุด ควรโปรโมทเพิ่มเติมเพื่อเพิ่มยอดขาย</li>
-          <li>ยอดขายมีแนวโน้มคงที่ตลอดทั้งปี แนะนำให้จัดโปรโมชันลดราคาในช่วงกลางปีเพื่อกระตุ้นยอดขาย</li>
+          <li>ยอดขายมีแนวโน้มคงที่ตลอดทั้งปี แสดงถึงความมั่นคงของตลาด</li>
           <li><span className="insight-highlight">Superhero Figure</span> มียอดขายน้อยที่สุด อาจพิจารณาทำโปรโมชันร่วมกับสินค้าหมวดอื่น</li>
         </ul>
       </div>
