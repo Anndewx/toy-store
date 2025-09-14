@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './MainPage.css';
 
-const Navbar = ({ currentUser, totalCartItems, onCartClick, onLogout }) => {
+const Navbar = ({ currentUser, totalCartItems, onCartClick }) => {
   const navigate = useNavigate();
   const [isShopMenuOpen, setIsShopMenuOpen] = useState(false);
 
@@ -62,15 +62,15 @@ const Navbar = ({ currentUser, totalCartItems, onCartClick, onLogout }) => {
           </button>
           
           {currentUser ? (
-            <div className="user-menu-container">
+            <div className="user-info-group">
               <span className="user-welcome">Hello, {currentUser.username}</span>
               <button className="logout-btn" onClick={handleLogout}>
-                <i className="fas fa-sign-out-alt"></i> Logout
+                Logout <i className="fas fa-sign-out-alt"></i>
               </button>
             </div>
           ) : (
             <Link className="login-btn" to="/login">
-              <i className="fas fa-sign-in-alt"></i> Login
+              Sign In <i className="fas fa-sign-in-alt"></i>
             </Link>
           )}
         </div>
