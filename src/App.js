@@ -13,6 +13,8 @@ import AnimeFiguresPage from './AnimeFiguresPage';
 import CheckoutPage from './CheckoutPage';
 import ReceiptPage from './ReceiptPage';
 import AnalyticsDashboard from './AnalyticsDashboard';
+import Products from './ProductCard'; 
+import ProductDetail from './ProductDetail';
 import './App.css'; 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/receipt" element={<ReceiptPage />} />
       <Route path="/analytics" element={<AnalyticsDashboard />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/products/:id" element={<ProductDetail />} />
     </Routes>
   );
 }

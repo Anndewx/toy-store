@@ -1,41 +1,55 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const db = require('../db');
+const mysql = require('mysql2/promise');
 
-// สมัครสมาชิก
-router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+module.exports = (dbConfig, bcrypt) => {
+    const pool = mysql.createPool(dbConfig);
 
-  db.query(
-    'INSERT INTO users (username, password) VALUES (?, ?)',
-    [username, hashedPassword],
-    (err, result) => {
-      if (err) return res.status(500).json({ error: 'Register failed' });
-      res.status(201).json({ message: 'User created' });
-    }
-  );
-});
+    // API สำหรับการลงทะเบียน
+    router.post('/register', async (req, res) => {
+        try {
+            const { username, password } = req.body;
+            
+            // แฮชรหัสผ่านก่อนบันทึกลงในฐานข้อมูล
+            const hashedPassword = await bcrypt.hash(password, 10);
+            
+            // บันทึกผู้ใช้ลงในฐานข้อมูล
+            await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
 
-// ล็อกอิน
-router.post('/login', (req, res) => {
-  const { username, password } = req.body;
+            res.status(200).json({ message: 'ลงทะเบียนสำเร็จ' });
+        } catch (error) {
+            console.error('Registration error:', error);
+            if (error.code === 'ER_DUP_ENTRY') {
+                return res.status(409).json({ message: 'ชื่อผู้ใช้นี้มีอยู่แล้ว' });
+            }
+            res.status(500).json({ message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' });
+        }
+    });
 
-  db.query(
-    'SELECT * FROM users WHERE username = ?',
-    [username],
-    async (err, results) => {
-      if (err || results.length === 0)
-        return res.status(400).json({ error: 'User not found' });
+    // API สำหรับการเข้าสู่ระบบ
+    router.post('/login', async (req, res) => {
+        try {
+            const { username, password } = req.body;
+            
+            // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
+            const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+            if (rows.length === 0) {
+                return res.status(401).json({ message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
+            }
+            const user = rows[0];
 
-      const validPassword = await bcrypt.compare(password, results[0].password);
-      if (!validPassword)
-        return res.status(400).json({ error: 'Invalid password' });
+            // เปรียบเทียบรหัสผ่านที่แฮชไว้
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
+            }
+            
+            res.status(200).json({ message: 'เข้าสู่ระบบสำเร็จ', user: { username: user.username } });
+        } catch (error) {
+            console.error('Login error:', error);
+            res.status(500).json({ message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' });
+        }
+    });
 
-      res.json({ message: 'Login successful' });
-    }
-  );
-});
-
-module.exports = router;
+    return router;
+};
